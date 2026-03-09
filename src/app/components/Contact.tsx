@@ -11,23 +11,17 @@ export function Contact() {
     setFormStatus('sending');
 
     const formData = new FormData(e.currentTarget);
-    const data = {
-      name: formData.get('name'),
-      email: formData.get('email'),
-      message: formData.get('message'),
-    };
 
     try {
-      // Using Formspree - sends to saikrishna.8d.kmbvm@gmail.com
-      const response = await fetch('https://formspree.io/f/xanyqajy', {
+      // Using Web3Forms - sends directly to saikrishna.8d.kmbvm@gmail.com
+      const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+        body: formData,
       });
 
-      if (response.ok) {
+      const result = await response.json();
+
+      if (result.success) {
         setFormStatus('success');
         (e.target as HTMLFormElement).reset();
         setTimeout(() => setFormStatus('idle'), 5000);
@@ -79,6 +73,9 @@ export function Contact() {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="space-y-6"
             >
+              {/* Hidden Web3Forms access key */}
+              <input type="hidden" name="access_key" value="5ff111c1-f152-4811-9cf8-e40e7973feb4" />
+              
               <div className="grid sm:grid-cols-2 gap-6">
                 <div>
                   <label htmlFor="name" className="block text-gray-700 mb-2">
